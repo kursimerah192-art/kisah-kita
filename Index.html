@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kisah Kita</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap');
+
+  :root{
+    --paper: #FBF1EA;
+    --paper-deep: #F3E3D8;
+    --ink: #3A1420;
+    --ink-soft: #7A4453;
+    --rose: #C1394F;
+    --rose-deep: #8E1F35;
+    --rose-light: #EFC0CA;
+    --gold: #B0813E;
+    --line: #E3CBC0;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #app{
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(193,57,79,0.06), transparent 40%),
+      radial-gradient(circle at 88% 92%, rgba(176,129,62,0.08), transparent 45%),
+      var(--paper);
+    padding: 40px 18px 70px;
+  }
+
+  .wrap{
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Header ---------- */
+  .masthead{
+    text-align:center;
+    margin-bottom: 34px;
+  }
+  .masthead .kicker{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .masthead h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size: clamp(40px, 8vw, 64px);
+    margin: 4px 0 10px;
+    color: var(--rose-deep);
+    line-height: 1.05;
+  }
+  .masthead .rule{
+    width: 90px;
+    height: 2px;
+    margin: 0 auto 14px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .masthead .sub{
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .masthead .sub b{ color: var(--rose); font-weight:500; }
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    display:flex;
+    justify-content:center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0;
+  }
+  .tab{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    padding: 10px 16px 12px;
+    cursor: pointer;
+    position: relative;
+    letter-spacing: 0.01em;
+  }
+  .tab.active{ color: var(--rose-deep); }
+  .tab.active::after{
+    content:'';
+    position:absolute;
+    left: 14px; right: 14px; bottom: -1px;
+    height: 2px;
+    background: var(--rose);
+  }
+  .tab:hover{ color: var(--rose); }
+
+  /* ---------- Page (paper card) ---------- */
+  .page{
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 0 var(--line), 0 18px 40px -28px rgba(58,20,32,0.35);
+    padding: 36px 30px;
+    position: relative;
+    min-height: 320px;
+  }
+  .page::before{
+    content:'';
+    position:absolute;
+    top:10px; left:10px; right:10px; bottom:10px;
+    border: 1px solid var(--line);
+    pointer-events:none;
+    opacity: 0.6;
+  }
+  @media (max-width: 520px){
+    .page{ padding: 26px 18px; }
+    .food-form{ grid-template-columns: 1fr; }
+    .food-form textarea, .file-row, .food-form .btn{ grid-column: span 1; }
+    .add-row{ flex-direction: column; }
+    .add-row input[type=text], .add-row textarea{ min-width: 0; width: 100%; }
+    .add-row .btn{ width: 100%; }
+    .countdown-grid{ gap: 6px; }
+  }
+
+  .section-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--rose-deep);
+    margin: 0 0 6px;
+  }
+  .section-desc{
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 26px;
+    max-width: 46ch;
+  }
+
+  /* ---------- Countdown ---------- */
+  .countdown-hero{ text-align:center; }
+  .seal{
+    width: 54px; height:54px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #d1546a, var(--rose-deep));
+    margin: 0 auto 18px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 6px 14px -6px rgba(142,31,53,0.6);
+  }
+  .seal svg{ width: 24px; height:24px; }
+
+  .countdown-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 460px;
+    margin: 22px auto 8px;
+  }
+  .count-cell .num{
+    font-family:'Cormorant Garamond', serif;
+    font-size: clamp(30px, 8vw, 46px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .count-cell .lbl{
+    font-size: 11px;
+    text-transform: lowercase;
+    color: var(--ink-soft);
+    margin-top: 6px;
+    letter-spacing: 0.03em;
+  }
+  .count-sep{
+    grid-column: span 0;
+  }
+
+  .together-line{
+    margin-top: 28px;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .together-line b{
+    color: var(--rose);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .anniv-note{
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--gold);
+  }
+
+  /* ---------- Form row ---------- */
+  .add-row{
+    display:flex;
+    gap: 8px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .add-row input[type=text], .add-row textarea{
+    flex: 1;
+    min-width: 180px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14.5px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    resize: vertical;
+  }
+  .add-row input:focus, .add-row textarea:focus{
+    outline: none;
+    border-color: var(--rose);
+  }
+  .btn{
+    font-family: 'Jost', sans-serif;
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    background: var(--rose-deep);
+    color: #fff;
+    border: none;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .btn:hover{ background: var(--rose); }
+  .btn:disabled{ opacity: 0.5; cursor: default; }
+  .btn.ghost{
+    background: none;
+    color: var(--rose-deep);
+    border: 1px solid var(--rose-light);
+    padding: 10px 18px;
+  }
+  .btn.ghost:hover{ background: var(--rose-light); }
+
+  /* ---------- Wishlist ---------- */
+  .wish-list{ list-style:none; margin:0; padding:0; }
+  .wish-item{
+    display:flex;
+    align-items:flex-start;
+    gap: 12px;
+    padding: 13px 2px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .wish-item:last-child{ border-bottom:none; }
+  .wish-check{
+    width: 19px; height:19px;
+    border: 1.5px solid var(--rose);
+    flex: none;
+    margin-top: 2px;
+    cursor: pointer;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff;
+  }
+  .wish-check.done{ background: var(--rose); }
+  .wish-check.done::after{
+    content:'✓';
+    color:#fff;
+    font-size: 12px;
+  }
+  .wish-text{
+    flex:1;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .wish-text.done{
+    text-decoration: line-through;
+    color: var(--ink-soft);
+  }
+  .wish-del{
+    background:none; border:none; cursor:pointer;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-family: 'Jost', sans-serif;
+    opacity: 0.6;
+  }
+  .wish-del:hover{ opacity:1; color: var(--rose); }
+
+  /* ---------- Sweet words ---------- */
+  .word-note{
+    background: var(--paper-deep);
+    border-left: 3px solid var(--rose);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .word-note:nth-child(odd){ transform: rotate(-0.4deg); }
+  .word-note:nth-child(even){ transform: rotate(0.3deg); }
+  .word-note p{
+    margin:0 0 8px;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .word-meta{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+  }
+  .word-del{
+    background:none;border:none;cursor:pointer;
+    color: var(--ink-soft); opacity:0.6; font-size: 12px;
+    font-family:'Jost', sans-serif;
+  }
+  .word-del:hover{ opacity:1; color:var(--rose); }
+
+  .pick-random{
+    text-align:center;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: linear-gradient(180deg, var(--rose-light), transparent 90%);
+  }
+  .pick-random .txt{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-style: italic;
+    color: var(--rose-deep);
+    min-height: 30px;
+  }
+
+  /* ---------- Foods ---------- */
+  .food-form{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .food-form input[type=text]{
+    font-family:'Jost', sans-serif;
+    font-size: 14.5px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .food-form textarea{
+    grid-column: span 2;
+    font-family:'Jost', sans-serif;
+    font-size: 14px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    resize: vertical;
+    min-height: 44px;
+  }
+  .file-row{
+    grid-column: span 2;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .file-row input[type=file]{ font-size:12.5px; }
+  .food-form .btn{ grid-column: span 2; }
+
+  .food-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+  }
+  .polaroid{
+    background:#fff;
+    padding: 10px 10px 14px;
+    box-shadow: 0 10px 22px -14px rgba(58,20,32,0.4);
+    position: relative;
+  }
+  .polaroid:nth-child(3n){ transform: rotate(-1.2deg); }
+  .polaroid:nth-child(3n+1){ transform: rotate(1deg); }
+  .polaroid:nth-child(3n+2){ transform: rotate(-0.5deg); }
+  .polaroid .ph{
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: var(--paper-deep);
+    display:block;
+  }
+  .polaroid .noph{
+    width:100%; aspect-ratio:1/1;
+    background: var(--paper-deep);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--ink-soft);
+    font-size: 26px;
+  }
+  .polaroid .fname{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 10px;
+    color: var(--ink);
+    text-align:center;
+  }
+  .polaroid .fnote{
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    text-align:center;
+    margin-top: 2px;
+  }
+  .polaroid .fdel{
+    position:absolute; top:6px; right:6px;
+    background: rgba(255,255,255,0.85);
+    border:none;
+    width:22px; height:22px;
+    cursor:pointer;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .polaroid .fdel:hover{ color: var(--rose); }
+
+  .empty{
+    text-align:center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    padding: 30px 10px;
+  }
+
+  .loading{
+    text-align:center;
+    padding: 60px 10px;
+    color: var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+  }
+
+  .footer-note{
+    text-align:center;
+    margin-top: 28px;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    opacity: 0.75;
+  }
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">membuka halaman…</div></div>
+
+<!-- Firebase SDK (untuk penyimpanan data yang sinkron antar perangkat) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+<script>
+  // >>> GANTI bagian ini dengan firebaseConfig dari project Firebase kamu <<<
+  const firebaseConfig = {
+    apiKey: "AIzaSyCV0Ma23C4B7xNfZldGU0y06RPnEdk5_lE",
+    authDomain: "kisah-kita-2c438.firebaseapp.com",
+    databaseURL: "https://kisah-kita-2c438-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "kisah-kita-2c438",
+    storageBucket: "kisah-kita-2c438.firebasestorage.app",
+    messagingSenderId: "580649241770",
+    appId: "1:580649241770:web:9d7cc5d2ed9042d55254d3",
+    measurementId: "G-FLYSSJZ47R"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
+<script>
+(function(){
+
+  const STORE_KEY = 'love-data';
+  const START_DATE = new Date(2026, 7, 12, 0, 0, 0); // 12 Agustus 2026
+
+  let state = {
+    loaded: false,
+    tab: 'countdown',
+    wishlist: [],
+    words: [],
+    foods: [],
+    randomWord: null
+  };
+
+  const app = document.getElementById('app');
+
+  function esc(s){
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : s;
+    return d.innerHTML;
+  }
+
+  async function loadData(){
+    try{
+      const snapshot = await db.ref(STORE_KEY).once('value');
+      const parsed = snapshot.val();
+      if(parsed){
+        state.wishlist = parsed.wishlist || [];
+        state.words = parsed.words || [];
+        state.foods = parsed.foods || [];
+      }
+    }catch(e){
+      console.error('Gagal memuat data:', e);
+    }
+    state.loaded = true;
+    render();
+
+    // dengarkan perubahan data secara real-time (misal pasangan menambah dari HP lain)
+    db.ref(STORE_KEY).on('value', (snapshot) => {
+      const parsed = snapshot.val();
+      if(parsed){
+        state.wishlist = parsed.wishlist || [];
+        state.words = parsed.words || [];
+        state.foods = parsed.foods || [];
+        if(state.loaded) render();
+      }
+    });
+  }
+
+  async function persist(){
+    try{
+      await db.ref(STORE_KEY).set({
+        wishlist: state.wishlist,
+        words: state.words,
+        foods: state.foods
+      });
+    }catch(e){
+      console.error('Gagal menyimpan:', e);
+    }
+  }
+
+  function uid(){
+    return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+  }
+
+  function fmtDate(ts){
+    try{
+      return new Date(ts).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+    }catch(e){ return ''; }
+  }
+
+  // ---------- countdown math ----------
+  function getNextAnniversary(now){
+    let year = now.getFullYear();
+    let target = new Date(year, 7, 12, 0,0,0);
+    if(target.getTime() <= now.getTime()){
+      target = new Date(year+1, 7, 12, 0,0,0);
+    }
+    return target;
+  }
+
+  function tickValues(){
+    const now = new Date();
+    const target = getNextAnniversary(now);
+    const diff = Math.max(0, target.getTime() - now.getTime());
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    const togetherDiff = now.getTime() - START_DATE.getTime();
+    const daysTogether = Math.max(0, Math.floor(togetherDiff / 86400000));
+
+    const anniversaryNumber = target.getFullYear() - START_DATE.getFullYear();
+
+    return { days, hours, mins, secs, daysTogether, anniversaryNumber, targetYear: target.getFullYear() };
+  }
+
+  // ---------- render ----------
+  function render(){
+    if(!state.loaded){
+      app.innerHTML = '<div class="loading">membuka halaman…</div>';
+      return;
+    }
+
+    const t = tickValues();
+
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="masthead">
+          <div class="kicker">sebuah halaman kecil, untuk kita</div>
+          <h1>Naufal Hanan Jati Asmara dan Shakayla Rachiel Tjokroprasmono</h1>
+          <div class="rule"></div>
+          <div class="sub">bersama sejak <b>12 Agustus 2026</b></div>
+        </div>
+
+        <div class="tabs">
+          ${tabBtn('countdown','Hitung Mundur')}
+          ${tabBtn('wishlist','Wishlist')}
+          ${tabBtn('words','Kata Manis')}
+          ${tabBtn('foods','Makanan Favorit')}
+        </div>
+
+        <div class="page">
+          ${state.tab === 'countdown' ? renderCountdown(t) : ''}
+          ${state.tab === 'wishlist' ? renderWishlist() : ''}
+          ${state.tab === 'words' ? renderWords() : ''}
+          ${state.tab === 'foods' ? renderFoods() : ''}
+        </div>
+
+        <div class="footer-note">tersimpan otomatis · halaman ini bisa dilihat &amp; diisi siapa saja yang membuka tautan ini</div>
+      </div>
+    `;
+
+    bindEvents();
+  }
+
+  function tabBtn(id, label){
+    return `<button class="tab ${state.tab===id?'active':''}" data-tab="${id}">${label}</button>`;
+  }
+
+  function renderCountdown(t){
+    return `
+      <div class="countdown-hero">
+        <div class="seal">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 20.5s-7.5-4.6-10-9.4C.5 7.6 2.4 4 6 4c2.1 0 3.7 1.2 4.6 2.6a1 1 0 0 0 1.6 0C13.1 5.2 14.7 4 16.8 4c3.6 0 5.5 3.6 4 7.1-2.5 4.8-8.8 9.4-8.8 9.4z" fill="#fff"/></svg>
+        </div>
+        <div class="section-title" style="text-align:center">Menuju Ulang Tahun ke-${t.anniversaryNumber}</div>
+        <div class="section-desc" style="margin-left:auto;margin-right:auto;text-align:center">12 Agustus ${t.targetYear} akan tiba dalam</div>
+
+        <div class="countdown-grid">
+          <div class="count-cell"><div class="num">${t.days}</div><div class="lbl">hari</div></div>
+          <div class="count-cell"><div class="num">${pad(t.hours)}</div><div class="lbl">jam</div></div>
+          <div class="count-cell"><div class="num">${pad(t.mins)}</div><div class="lbl">menit</div></div>
+          <div class="count-cell"><div class="num">${pad(t.secs)}</div><div class="lbl">detik</div></div>
+        </div>
+
+        <div class="together-line">sudah <b>${t.daysTogether.toLocaleString('id-ID')} hari</b> berjalan bersama, sejak 12 Agustus 2026</div>
+        <div class="anniv-note">semoga masih banyak lagi tanggal 12 Agustus yang bisa kita lewati berdua.</div>
+      </div>
+    `;
+  }
+  function pad(n){ return n.toString().padStart(2,'0'); }
+
+  function renderWishlist(){
+    const items = state.wishlist;
+    return `
+      <div class="section-title">Wishlist Kita</div>
+      <div class="section-desc">Hal-hal yang ingin kita lakukan, kunjungi, atau miliki bersama.</div>
+
+      <div class="add-row">
+        <input type="text" id="wish-input" placeholder="tulis satu keinginan…" maxlength="200">
+        <button class="btn" id="wish-add">Tambah</button>
+      </div>
+
+      ${items.length === 0 ? '<div class="empty">belum ada wishlist. mulai tulis satu keinginan di atas.</div>' : `
+        <ul class="wish-list">
+          ${items.map(w => `
+            <li class="wish-item">
+              <button class="wish-check ${w.done?'done':''}" data-id="${w.id}"></button>
+              <div class="wish-text ${w.done?'done':''}">${esc(w.text)}</div>
+              <button class="wish-del" data-id="${w.id}">hapus</button>
+            </li>
+          `).join('')}
+        </ul>
+      `}
+    `;
+  }
+
+  function renderWords(){
+    const words = state.words;
+    return `
+      <div class="section-title">Kata-Kata Manis</div>
+      <div class="section-desc">Tuliskan apa saja yang ingin kamu sampaikan — bebas, romantis, atau sekadar lucu.</div>
+
+      <div class="add-row">
+        <textarea id="word-input" rows="2" placeholder="tulis sesuatu untuk pasanganmu…" maxlength="500"></textarea>
+      </div>
+      <div style="margin-bottom:24px">
+        <button class="btn" id="word-add">Simpan Kata</button>
+      </div>
+
+      <div class="pick-random">
+        <div class="txt" id="random-word-txt">${state.randomWord ? '"' + esc(state.randomWord) + '"' : 'tekan tombol untuk membaca satu kata manis secara acak'}</div>
+        <div style="margin-top:12px">
+          <button class="btn ghost" id="word-random">Pilih Acak</button>
+        </div>
+      </div>
+
+      ${words.length === 0 ? '<div class="empty">belum ada kata yang tersimpan.</div>' : words.map(w => `
+        <div class="word-note">
+          <p>${esc(w.text)}</p>
+          <div class="word-meta">
+            <span>${fmtDate(w.ts)}</span>
+            <button class="word-del" data-id="${w.id}">hapus</button>
+          </div>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  function renderFoods(){
+    const foods = state.foods;
+    return `
+      <div class="section-title">Makanan Favorit</div>
+      <div class="section-desc">Kumpulan makanan kesukaan kita, lengkap dengan fotonya.</div>
+
+      <div class="food-form">
+        <input type="text" id="food-name" placeholder="nama makanan" maxlength="60">
+        <input type="text" id="food-owner" placeholder="favorit siapa? (opsional)" maxlength="40">
+        <textarea id="food-note" placeholder="catatan kecil, misalnya tempat favorit atau alasan suka (opsional)"></textarea>
+        <div class="file-row">
+          <input type="file" id="food-photo" accept="image/*">
+          <span id="food-photo-status"></span>
+        </div>
+        <button class="btn" id="food-add">Tambah Makanan</button>
+      </div>
+
+      ${foods.length === 0 ? '<div class="empty">belum ada makanan favorit yang ditambahkan.</div>' : `
+        <div class="food-grid">
+          ${foods.map(f => `
+            <div class="polaroid">
+              <button class="fdel" data-id="${f.id}">✕</button>
+              ${f.photo ? `<img class="ph" src="${f.photo}" alt="${esc(f.name)}">` : `<div class="noph">🍽️</div>`}
+              <div class="fname">${esc(f.name)}</div>
+              ${f.owner ? `<div class="fnote">favorit ${esc(f.owner)}</div>` : ''}
+              ${f.note ? `<div class="fnote">${esc(f.note)}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `}
+    `;
+  }
+
+  // ---------- image compression ----------
+  function compressImage(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxW = 720;
+          const scale = Math.min(1, maxW / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.72));
+        };
+        img.onerror = () => reject(new Error('gagal memuat gambar'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('gagal membaca file'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  let pendingPhoto = null;
+
+  // ---------- events ----------
+  function bindEvents(){
+    app.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.tab = btn.dataset.tab;
+        state.randomWord = null;
+        pendingPhoto = null;
+        render();
+      });
+    });
+
+    if(state.tab === 'wishlist'){
+      const addBtn = document.getElementById('wish-add');
+      const input = document.getElementById('wish-input');
+      const doAdd = () => {
+        const v = input.value.trim();
+        if(!v) return;
+        state.wishlist.unshift({ id: uid(), text: v, done: false });
+        input.value = '';
+        render();
+        persist();
+      };
+      addBtn.addEventListener('click', doAdd);
+      input.addEventListener('keydown', e => { if(e.key === 'Enter') doAdd(); });
+
+      app.querySelectorAll('.wish-check').forEach(el => {
+        el.addEventListener('click', () => {
+          const item = state.wishlist.find(w => w.id === el.dataset.id);
+          if(item){ item.done = !item.done; render(); persist(); }
+        });
+      });
+      app.querySelectorAll('.wish-del').forEach(el => {
+        el.addEventListener('click', () => {
+          state.wishlist = state.wishlist.filter(w => w.id !== el.dataset.id);
+          render(); persist();
+        });
+      });
+    }
+
+    if(state.tab === 'words'){
+      const addBtn = document.getElementById('word-add');
+      const input = document.getElementById('word-input');
+      addBtn.addEventListener('click', () => {
+        const v = input.value.trim();
+        if(!v) return;
+        state.words.unshift({ id: uid(), text: v, ts: Date.now() });
+        input.value = '';
+        render();
+        persist();
+      });
+
+      document.getElementById('word-random').addEventListener('click', () => {
+        if(state.words.length === 0){
+          document.getElementById('random-word-txt').textContent = 'belum ada kata yang tersimpan.';
+          return;
+        }
+        const pick = state.words[Math.floor(Math.random() * state.words.length)];
+        state.randomWord = pick.text;
+        document.getElementById('random-word-txt').textContent = '"' + pick.text + '"';
+      });
+
+      app.querySelectorAll('.word-del').forEach(el => {
+        el.addEventListener('click', () => {
+          state.words = state.words.filter(w => w.id !== el.dataset.id);
+          render(); persist();
+        });
+      });
+    }
+
+    if(state.tab === 'foods'){
+      const photoInput = document.getElementById('food-photo');
+      const statusEl = document.getElementById('food-photo-status');
+      photoInput.addEventListener('change', async () => {
+        const file = photoInput.files[0];
+        if(!file) return;
+        statusEl.textContent = 'memproses foto…';
+        try{
+          pendingPhoto = await compressImage(file);
+          statusEl.textContent = 'foto siap ditambahkan';
+        }catch(e){
+          statusEl.textContent = 'gagal memuat foto';
+          pendingPhoto = null;
+        }
+      });
+
+      document.getElementById('food-add').addEventListener('click', () => {
+        const name = document.getElementById('food-name').value.trim();
+        const owner = document.getElementById('food-owner').value.trim();
+        const note = document.getElementById('food-note').value.trim();
+        if(!name) return;
+        state.foods.unshift({ id: uid(), name, owner, note, photo: pendingPhoto || null });
+        pendingPhoto = null;
+        render();
+        persist();
+      });
+
+      app.querySelectorAll('.fdel').forEach(el => {
+        el.addEventListener('click', () => {
+          state.foods = state.foods.filter(f => f.id !== el.dataset.id);
+          render(); persist();
+        });
+      });
+    }
+  }
+
+  // tick every second, but only re-render the countdown numbers to avoid disrupting form inputs
+  setInterval(() => {
+    if(state.tab === 'countdown' && state.loaded){
+      render();
+    }
+  }, 1000);
+
+  loadData();
+})();
+</script>
+</body>
+</html>
